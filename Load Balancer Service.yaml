@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: lb-service
+  namespace: java
+  labels:
+    app: app01
+spec:
+  selector:
+    app: app01  # Points to the Tomcat application pods
+  ports:
+    - protocol: TCP
+      port: 80      # External port for users
+      targetPort: 8080  # Tomcat's application port
+  type: LoadBalancer

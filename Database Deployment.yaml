@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db01
+  namespace: java
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db01
+  template:
+    metadata:
+      labels:
+        app: db01
+    spec:
+      containers:
+        - name: db
+          image: khaledreda/sql_db:v1.0
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: db-pass
+      initContainers:
+        - name: busybox
+          image: busybox
+          args: ["rm","-rf","/var/lib/mysql/lost+found"]
